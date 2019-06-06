@@ -3,20 +3,9 @@
 	
 	if ( isset( $_POST[ $module->get_prefix( 'import' ) ] ) ) {
 		$file = $_FILES[ $module->get_prefix( 'import_file' ) ];
-		$data = json_decode( file_get_contents( $file['tmp_name'] ), true );
+		$data = file_get_contents( $file['tmp_name'] );
 		
-		foreach ( $data as $prefix => $settings ) {
-			if ( ! empty( $settings ) ) {
-				foreach ( $settings as $setting => $value ) {
-					if ( ! empty( $value ) ) {
-						$option = $prefix . '_settings_' . $setting;
-						error_log($option);
-						
-						update_option( $option, $value, true );
-					}
-				}
-			}
-		}
+		$module->settings_import( $data );
 	}
 ?>
 
