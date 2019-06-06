@@ -1,8 +1,6 @@
 <?php
 namespace sv_100;
 
-use sv_core\settings;
-
 /**
  * @version         1.00
  * @author			straightvisions
