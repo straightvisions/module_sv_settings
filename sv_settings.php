@@ -1,6 +1,8 @@
 <?php
 namespace sv_100;
 
+use sv_core\settings;
+
 /**
  * @version         1.00
  * @author			straightvisions
@@ -32,10 +34,18 @@ class sv_settings extends init {
 			 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
 
 		// Loads Settings
-		$this->load_settings();
+		$this->check_first_load()->load_settings();
 		
 		// Action Hooks
 		add_action( 'wp_ajax_' . $this->get_prefix( 'export' ) , array( $this, 'settings_export' ) );
+	}
+	
+	protected function check_first_load(): sv_settings {
+		if ( $this->is_first_load() ) {
+			$this->settings_import( file_get_contents( $this->get_path( 'lib/backend/settings/default.json' ) ) );
+		}
+
+		return $this;
 	}
 
 	protected function load_settings(): sv_settings {
@@ -65,5 +75,21 @@ class sv_settings extends init {
 		echo $file['data'];
 		
 		wp_die();
+	}
+	
+	protected function settings_import( string $json_data ) {
+		$data = json_decode( $json_data, true );
+		
+		foreach ( $data as $prefix => $settings ) {
+			if ( ! empty( $settings ) ) {
+				foreach ( $settings as $setting => $value ) {
+					if ( ! empty( $value ) ) {
+						$option = $prefix . '_settings_' . $setting;
+						
+						update_option( $option, $value, true );
+					}
+				}
+			}
+		}
 	}
 }
