@@ -32,7 +32,7 @@ class sv_settings extends init {
 			 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
 
 		// Loads Settings
-		$this->check_first_load()->load_settings();
+		$this->check_first_load()->register_scripts();
 		
 		// Action Hooks
 		add_action( 'wp_ajax_' . $this->get_prefix( 'export' ) , array( $this, 'settings_export' ) );
@@ -45,20 +45,16 @@ class sv_settings extends init {
 
 		return $this;
 	}
-
-	protected function load_settings(): sv_settings {
-		$this->s['export'] = static::$settings->create( $this )
-			->set_ID( 'export' )
-			->set_title( __( 'Export', $this->get_module_name() ) )
-			->set_description( __( 'Check the checkbox and click on "Save settings", to export your module settings.', $this->get_module_name() ) )
-			->load_type( 'checkbox' );
-
-		$this->s['import'] = static::$settings->create( $this )
-			->set_ID( 'import' )
-			->set_title( __( 'Import your module settings', $this->get_module_name() ) )
-			->load_type( 'upload' );
-		
-		$this->s['import']->run_type()->set_allowed_filetypes( array( '.json' ) );
+	
+	protected function register_scripts(): sv_settings {
+		// Register Styles
+		$this->scripts_queue['tools']			= static::$scripts
+			->create( $this )
+			->set_ID( 'tools' )
+			->set_path( 'lib/backend/css/tools.css' )
+			->set_inline( true )
+			->set_is_backend()
+			->set_is_enqueued();
 		
 		return $this;
 	}
