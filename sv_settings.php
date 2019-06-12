@@ -60,13 +60,18 @@ class sv_settings extends init {
 	}
 	
 	public function settings_export() {
-		$file['name']	= $this->get_prefix( 'export_' . current_time( 'YmdHis' ) . '.json' );
-		$file['data']	= wp_json_encode( $this->get_modules_settings() );
+		$filename								= $this->get_prefix( 'export_' . current_time( 'YmdHis' ) . '.json' );
+		$settings								= $this->get_modules_settings();
+		$settings[ 'sv_100_scripts_settings' ]	= $this->get_scripts_settings();
+		
+		foreach ( $settings as $name => $value ) {
+			$settings[ $name ] = array_filter( $value );
+		}
 		
 		header('Content-Type: application/json');
-		header('Content-Disposition: attachment;filename="' . $file['name'] . '"');
+		header('Content-Disposition: attachment;filename="' . $filename . '"');
 		
-		echo $file['data'];
+		echo wp_json_encode( $settings );
 		
 		wp_die();
 	}
@@ -74,15 +79,25 @@ class sv_settings extends init {
 	protected function settings_import( string $json_data ) {
 		$data = json_decode( $json_data, true );
 		
-		foreach ( $data as $prefix => $settings ) {
-			if ( ! empty( $settings ) ) {
-				foreach ( $settings as $setting => $value ) {
-					if ( ! empty( $value ) ) {
-						$option = $prefix . '_settings_' . $setting;
-						
-						update_option( $option, $value, true );
-					}
+		// Deletes all options that starts with "sv_100_sv_" or "sv_100_scripts_settings_"
+		foreach ( wp_load_alloptions() as $option => $value ) {
+			if ( strpos( $option, 'sv_100_sv_' ) === 0 || strpos( $option, '0_settings_sv_100' ) === 0 ) {
+				delete_option( $option );
+			}
+		}
+		
+		// Sets all new options
+		foreach ( $data as $name => $settings ) {
+			// Module Settings
+			
+			foreach ( $settings as $setting => $value ) {
+				$option = $setting;
+				
+				if ( $name !== 'sv_100_scripts_settings' ) {
+					$option = $name . '_settings_' . $setting;
 				}
+				
+				update_option( $option, $value, true );
 			}
 		}
 	}
