@@ -17,16 +17,13 @@ class sv_settings extends init {
 	}
 
 	public function init() {
-		// Translates the module
-		load_theme_textdomain( 'sv_settings', $this->get_path( 'languages' ) );
-
 		// Module Info
 		$this->set_module_title( 'SV Settings' );
-		$this->set_module_desc( __( 'Import and export your settings.', 'sv_settings' ) );
+		$this->set_module_desc( __( 'Import and export your settings.', 'sv_100' ) );
 
 		// Section Info
-		$this->set_section_title( __( 'Settings Import/Export', 'sv_settings' ) );
-		$this->set_section_desc( __( 'Import and export your settings', 'sv_settings' ) );
+		$this->set_section_title( __( 'Settings Import/Export', 'sv_100' ) );
+		$this->set_section_desc( __( 'Import and export your settings', 'sv_100' ) );
 		$this->set_section_type( 'tools' );
 		$this->get_root()->add_section( $this )
 			 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
