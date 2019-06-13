@@ -12,10 +12,6 @@ namespace sv_100;
  */
 
 class sv_settings extends init {
-	public function __construct() {
-	
-	}
-
 	public function init() {
 		// Module Info
 		$this->set_module_title( 'SV Settings' );
