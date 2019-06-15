@@ -12,7 +12,7 @@
 <div class="<?php echo $sv_settings->get_prefix(); ?>">
 	<form method="post" action="" enctype="multipart/form-data">
 		<div class="sv_setting <?php echo $sv_settings->get_prefix( 'import' ); ?>">
-			<h4><?php _e( 'Import', $sv_settings->get_module_name() ); ?></h4>
+			<h4><?php _e( 'Import', 'straightvisions_100' ); ?></h4>
 			<div class="description"><?php _e( 'Select your settings file and click on "Import Settings".<br>Allowed filetypes: .json', 'straightvisions_100' ); ?></div>
 			<label for="<?php echo $sv_settings->get_prefix( 'import_file' ); ?>">
 				<input data-sv_type="sv_form_field"
