@@ -1,10 +1,10 @@
 <?php
-namespace sv_100;
+namespace sv100;
 
 /**
  * @version         1.00
  * @author			straightvisions
- * @package			sv_100
+ * @package			sv100
  * @copyright		2019 straightvisions GmbH
  * @link			https://straightvisions.com
  * @since			1.0
@@ -15,11 +15,11 @@ class sv_settings extends init {
 	public function init() {
 		// Module Info
 		$this->set_module_title( 'SV Settings' );
-		$this->set_module_desc( __( 'Import and export your settings.', 'straightvisions-100' ) );
+		$this->set_module_desc( __( 'Import and export your settings.', 'sv100' ) );
 
 		// Section Info
-		$this->set_section_title( __( 'Settings Import/Export', 'straightvisions-100' ) );
-		$this->set_section_desc( __( 'Import and export your settings', 'straightvisions-100' ) );
+		$this->set_section_title( __( 'Settings Import/Export', 'sv100' ) );
+		$this->set_section_desc( __( 'Import and export your settings', 'sv100' ) );
 		$this->set_section_type( 'tools' );
 		$this->get_root()->add_section( $this )
 			 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
@@ -55,7 +55,7 @@ class sv_settings extends init {
 	public function settings_export() {
 		$filename								= $this->get_prefix( 'export_' . current_time( 'YmdHis' ) . '.json' );
 		$settings								= $this->get_modules_settings();
-		$settings[ 'sv_100_scripts_settings' ]	= $this->get_scripts_settings();
+		$settings[ 'sv100_scripts_settings' ]	= $this->get_scripts_settings();
 		
 		foreach ( $settings as $name => $value ) {
 			$settings[ $name ] = array_filter( $value );
@@ -72,9 +72,9 @@ class sv_settings extends init {
 	protected function settings_import( string $json_data ) {
 		$data = json_decode( $json_data, true );
 		
-		// Deletes all options that starts with "sv_100_sv_" or "sv_100_scripts_settings_"
+		// Deletes all options that starts with "sv100_sv_" or "sv100_scripts_settings_"
 		foreach ( wp_load_alloptions() as $option => $value ) {
-			if ( strpos( $option, 'sv_100_sv_' ) === 0 || strpos( $option, '0_settings_sv_100' ) === 0 ) {
+			if ( strpos( $option, 'sv100_sv_' ) === 0 || strpos( $option, '0_settings_sv100' ) === 0 ) {
 				delete_option( $option );
 			}
 		}
@@ -86,7 +86,7 @@ class sv_settings extends init {
 			foreach ( $settings as $setting => $value ) {
 				$option = $setting;
 				
-				if ( $name !== 'sv_100_scripts_settings' ) {
+				if ( $name !== 'sv100_scripts_settings' ) {
 					$option = $name . '_settings_' . $setting;
 				}
 				
