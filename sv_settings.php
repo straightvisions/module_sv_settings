@@ -15,11 +15,11 @@ class sv_settings extends init {
 	public function init() {
 		// Module Info
 		$this->set_module_title( 'SV Settings' );
-		$this->set_module_desc( __( 'Import and export your settings.', 'straightvisions_100' ) );
+		$this->set_module_desc( __( 'Import and export your settings.', 'straightvisions-100' ) );
 
 		// Section Info
-		$this->set_section_title( __( 'Settings Import/Export', 'straightvisions_100' ) );
-		$this->set_section_desc( __( 'Import and export your settings', 'straightvisions_100' ) );
+		$this->set_section_title( __( 'Settings Import/Export', 'straightvisions-100' ) );
+		$this->set_section_desc( __( 'Import and export your settings', 'straightvisions-100' ) );
 		$this->set_section_type( 'tools' );
 		$this->get_root()->add_section( $this )
 			 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
