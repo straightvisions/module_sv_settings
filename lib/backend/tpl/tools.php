@@ -33,7 +33,7 @@
 	<div class="sv_setting <?php echo $this->get_module( 'sv_settings' )->get_prefix( 'export' ); ?>">
 		<h4><?php _e( 'Export', 'sv100' ); ?></h4>
 		<label for="<?php echo $this->get_module( 'sv_settings' )->get_prefix( 'export' ); ?>">
-			<a href="https://lab.straightvisions.com/wp-admin/admin-ajax.php?action=sv100_sv_settings_export"
+			<a href="<?php echo admin_url( 'admin-ajax.php' ); ?>?action=sv100_sv_settings_export"
 			   class="button">
 				<?php _e( 'Export Settings', 'sv100' ); ?>
 			</a>
