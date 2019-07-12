@@ -74,11 +74,14 @@
 			$data = json_decode( $json_data, true );
 			
 			// Deletes all options that starts with "sv100_sv_" or "sv100_scripts_settings_"
+			// @todo: check if this can be removed
 			foreach ( wp_load_alloptions() as $option => $value ) {
 				if ( strpos( $option, 'sv100_sv_' ) === 0 || strpos( $option, '0_settings_sv100' ) === 0 ) {
 					delete_option( $option );
 				}
 			}
+			
+			// @todo: implement nonce-check
 			
 			// Sets all new options
 			foreach ( $data as $name => $settings ) {
@@ -90,7 +93,7 @@
 					if ( $name !== 'sv100_scripts_settings' ) {
 						$option = $name . '_settings_' . $setting;
 					}
-					
+
 					update_option( $option, $value, true );
 				}
 			}
