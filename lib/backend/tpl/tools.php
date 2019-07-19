@@ -3,13 +3,15 @@
 		isset( $_GET[ $this->get_module( 'sv_settings' )->get_prefix( 'import' ) ] )
 		&& wp_verify_nonce( $_GET[ $this->get_module( 'sv_settings' )->get_prefix( 'import' ) ], $this->get_module( 'sv_settings' )->get_prefix( 'import' ) )
 	) {
-		$file = $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ];
-		
-		if ( $file['size'] > 0 ) {
-			$data = file_get_contents( $file['tmp_name'] );
-			
-			$this->get_module( 'sv_settings' )->settings_import( $data );
-		}
+	    if ( isset( $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ] ) ) {
+		    $file = $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ];
+
+		    if ( $file['size'] > 0 ) {
+			    $data = file_get_contents( $file['tmp_name'] );
+
+			    $this->get_module( 'sv_settings' )->settings_import( $data );
+		    }
+        }
 	}
 
 	// Nonce for import
@@ -24,7 +26,10 @@
             'title' => __( 'Import Settings', 'sv100' ),
             'desc'	=> __( 'All your settings will be removed and replaced with the new settings.', 'sv100' ) . '<br>' .
                          __( 'Do you want to proceed?', 'sv100' ),
-            'type'	=> 'confirm'
+            'type'	=> 'confirm',
+            'args'  => array(
+                'form' => $this->get_module( 'sv_settings' )->get_prefix( 'import' )
+            )
         )
     );
 
