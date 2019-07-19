@@ -57,7 +57,7 @@
 				$settings[ $name ] = array_filter( $value );
 			}
 
-			header( 'Content-Type: application/json');
+			header( 'Content-Type: application/json' );
 			header( 'Content-Disposition: attachment;filename="' . $filename . '"' );
 			
 			echo wp_json_encode( $settings );
@@ -66,6 +66,8 @@
 		}
 		
 		public function settings_reset() {
+			if ( ! check_ajax_referer( $this->get_prefix( 'reset' ), 'nonce' ) ) return false;
+
 			$this->settings_import( file_get_contents( $this->get_path( 'lib/backend/settings/default.json' ) ) );
 			
 			echo json_encode( array(
@@ -73,7 +75,7 @@
 				'msg' 		=> __( 'Successfully reseted all settings.', 'sv100' ),
 				'type'		=> 'success',
 			));
-			
+
 			wp_die();
 		}
 		
