@@ -14,7 +14,7 @@
 	class sv_settings extends init {
 		public function init() {
 			$this->set_module_title( 'SV Settings' )
-				 ->set_module_desc( __( 'Import and export your settings.', 'sv100' ) )
+				 ->set_module_desc( __( 'Manages settings', 'sv100' ) )
 				 ->check_first_load()
 				 ->register_scripts()
 				 ->set_section_title( __( 'Settings Import/Export', 'sv100' ) )

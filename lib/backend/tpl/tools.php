@@ -23,7 +23,7 @@
 	// Modal for import
     $import_modal = wp_json_encode(
         array(
-            'title' => __( 'Import Settings', 'sv100' ),
+            'title' => __( 'Import settings', 'sv100' ),
             'desc'	=> __( 'All your settings will be removed and replaced with the new settings.', 'sv100' ) . '<br>' .
                          __( 'Do you want to proceed?', 'sv100' ),
             'type'	=> 'confirm',
@@ -48,7 +48,7 @@
     // Modal for reset
 	$reset_modal = wp_json_encode(
 		array(
-			'title' => __( 'Reset Settings', 'sv100' ),
+			'title' => __( 'Reset settings', 'sv100' ),
 			'desc'	=> __( 'All your settings will be removed and replaced with the default settings.', 'sv100' ) . '<br>' .
 			             __( 'Do you want to proceed?', 'sv100' ),
 			'type'	=> 'confirm'
@@ -64,7 +64,7 @@
 			<h4><?php _e( 'Import', 'sv100' ); ?></h4>
 			<div class="description">
 				<?php
-					echo __( 'Select your settings file and click on "Import Settings".', 'sv100' ) . '<br>' .
+					echo __( 'Select your settings file and click on "Import settings".', 'sv100' ) . '<br>' .
 						 __( 'Allowed filetypes: .json', 'sv100' );
 				?>
 			</div>
@@ -80,7 +80,7 @@
 						type="button"
 						data-sv_admin_modal='[<?php echo $import_modal; ?>]'
 				>
-					<?php _e( 'Import Settings', 'sv100' ); ?>
+					<?php _e( 'Import settings', 'sv100' ); ?>
 				</button>
 			</label>
 		</div>
@@ -90,7 +90,7 @@
 		<h4><?php _e( 'Export', 'sv100' ); ?></h4>
 		<label for="<?php echo $this->get_module( 'sv_settings' )->get_prefix( 'export' ); ?>">
 			<a href="<?php echo $export_url; ?>" class="button">
-				<?php _e( 'Export Settings', 'sv100' ); ?>
+				<?php _e( 'Export settings', 'sv100' ); ?>
 			</a>
 		</label>
 	</div>
@@ -106,7 +106,7 @@
 					data-sv_admin_modal='[<?php echo $reset_modal; ?>]'
 					data-sv_admin_ajax='[<?php echo $reset_ajax; ?>]'
 			>
-				<?php _e( 'Reset Settings', 'sv100' ); ?>
+				<?php _e( 'Reset settings', 'sv100' ); ?>
 			</button>
 		</label>
 	</div>
