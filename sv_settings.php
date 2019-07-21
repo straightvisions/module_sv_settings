@@ -15,7 +15,6 @@
 		public function init() {
 			$this->set_module_title( 'SV Settings' )
 				 ->set_module_desc( __( 'Manages settings', 'sv100' ) )
-				 ->check_first_load()
 				 ->register_scripts()
 				 ->set_section_title( __( 'Settings Import/Export', 'sv100' ) )
 				 ->set_section_desc( __( 'Import and export your settings', 'sv100' ) )
@@ -27,14 +26,6 @@
 			// Action Hooks
 			add_action( 'wp_ajax_' . $this->get_prefix( 'export' ) , array( $this, 'settings_export' ) );
 			add_action( 'wp_ajax_' . $this->get_prefix( 'reset' ), array( $this, 'settings_reset' ) );
-		}
-		
-		protected function check_first_load(): sv_settings {
-			if ( $this->is_first_load() ) {
-				$this->settings_import( file_get_contents( $this->get_path( 'lib/backend/settings/default.json' ) ) );
-			}
-			
-			return $this;
 		}
 		
 		protected function register_scripts(): sv_settings {
@@ -68,7 +59,7 @@
 		public function settings_reset() {
 			if ( ! check_ajax_referer( $this->get_prefix( 'reset' ), 'nonce' ) ) return false;
 
-			$this->settings_import( file_get_contents( $this->get_path( 'lib/backend/settings/default.json' ) ) );
+			$this->delete_options();
 			
 			echo json_encode( array(
 				'notice'	=> true,
