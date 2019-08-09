@@ -4,13 +4,22 @@
 		&& wp_verify_nonce( $_GET[ $this->get_module( 'sv_settings' )->get_prefix( 'import' ) ], $this->get_module( 'sv_settings' )->get_prefix( 'import' ) )
 	) {
 	    if ( isset( $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ] ) ) {
-		    $file = $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ];
+			global $wp_filesystem;
 
-		    if ( $file['size'] > 0 ) {
-			    $data = file_get_contents( $file['tmp_name'] );
+			require_once ( ABSPATH . '/wp-admin/includes/file.php' );
+			WP_Filesystem();
 
-			    $this->get_module( 'sv_settings' )->settings_import( $data );
-		    }
+			// settings uploaded?
+			if ( $wp_filesystem->exists( $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ]['tmp_name'] ) ) {
+				// settings in JSON format?
+				if(json_decode( $wp_filesystem->get_contents( $_FILES[ $this->get_module( 'sv_settings' )->get_prefix( 'import_file' ) ]['tmp_name'] ) )) {
+
+					$data = $wp_filesystem->get_contents($_FILES[$this->get_module('sv_settings')->get_prefix('import_file')]['tmp_name']);
+
+					$this->get_module('sv_settings')->settings_import($data);
+
+				}
+			}
         }
 	}
 
