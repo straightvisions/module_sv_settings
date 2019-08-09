@@ -14,8 +14,8 @@
 	class sv_settings extends init {
 		public function init() {
 			$this
-				 ->set_section_title( __( 'Settings Import/Export', 'sv100_companion' ) )
-				 ->set_section_desc( __( 'Import and export your settings', 'sv100_companion' ) )
+				 ->set_section_title( __( 'SV100 Settings Import/Export', 'sv100_companion' ) )
+				 ->set_section_desc( __( 'Import and export SV100 Theme settings', 'sv100_companion' ) )
 				 ->set_section_type( 'tools' )
 				->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) )
 				->register_scripts()
