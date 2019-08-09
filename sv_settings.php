@@ -1,5 +1,5 @@
 <?php
-	namespace sv100;
+	namespace sv100_companion;
 	
 	/**
 	 * @version         4.000
@@ -13,15 +13,14 @@
 	
 	class sv_settings extends init {
 		public function init() {
-			$this->set_module_title( 'SV Settings' )
-				 ->set_module_desc( __( 'Manages settings', 'sv100' ) )
-				 ->register_scripts()
-				 ->set_section_title( __( 'Settings Import/Export', 'sv100' ) )
-				 ->set_section_desc( __( 'Import and export your settings', 'sv100' ) )
+			$this
+				 ->set_section_title( __( 'Settings Import/Export', 'sv100_companion' ) )
+				 ->set_section_desc( __( 'Import and export your settings', 'sv100_companion' ) )
 				 ->set_section_type( 'tools' )
+				->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) )
+				->register_scripts()
 				 ->get_root()
-				 ->add_section( $this )
-				 ->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) );
+				 ->add_section( $this );
 			
 			// Action Hooks
 			add_action( 'wp_ajax_' . $this->get_prefix( 'export' ) , array( $this, 'settings_export' ) );
@@ -63,7 +62,7 @@
 			
 			echo json_encode( array(
 				'notice'	=> true,
-				'msg' 		=> __( 'Successfully reseted all settings.', 'sv100' ),
+				'msg' 		=> __( 'Successfully reseted all settings.', 'sv100_companion' ),
 				'type'		=> 'success',
 			));
 
