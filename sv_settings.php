@@ -40,8 +40,8 @@
 		
 		public function settings_export() {
 			$filename								= $this->get_prefix( 'export_' . current_time( 'YmdHis' ) . '.json' );
-			$settings								= $this->get_modules_settings();
-			$settings[ 'sv100_scripts_settings' ]	= $this->get_scripts_settings();
+			$settings								= $this->get_instance('sv100')->get_modules_settings();
+			$settings[ 'sv100_scripts_settings' ]	= $this->get_instance('sv100')->get_scripts_settings();
 			
 			foreach ( $settings as $name => $value ) {
 				$settings[ $name ] = array_filter( $value );
