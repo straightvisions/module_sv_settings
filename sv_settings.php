@@ -92,7 +92,11 @@
 		
 		private function delete_options() {
 			foreach ( wp_load_alloptions() as $option => $value ) {
-				if ( strpos( $option, 'sv100_sv_' ) === 0 || strpos( $option, '0_settings_sv100' ) === 0 ) {
+				if (
+					strpos( $option, 'sv100_' ) === 0
+					|| strpos( $option, '0_settings_sv100' ) === 0
+					|| strpos( $option, 'sv_100' ) === 0 // legacy
+				) {
 					delete_option( $option );
 				}
 			}
