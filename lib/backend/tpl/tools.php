@@ -1,29 +1,4 @@
 <?php
-	if (
-		isset( $_GET[ $module->get_prefix( 'import' ) ] )
-		&& wp_verify_nonce( $_GET[ $module->get_prefix( 'import' ) ], $module->get_prefix( 'import' ) )
-	) {
-	    if ( isset( $_FILES[ $module->get_prefix( 'import_file' ) ] ) ) {
-			global $wp_filesystem;
-
-			require_once ( ABSPATH . '/wp-admin/includes/file.php' );
-			WP_Filesystem();
-
-			// settings uploaded?
-			if ( $wp_filesystem->exists( $_FILES[ $module->get_prefix( 'import_file' ) ]['tmp_name'] ) ) {
-				// settings in JSON format?
-				if(json_decode( $wp_filesystem->get_contents( $_FILES[ $module->get_prefix( 'import_file' ) ]['tmp_name'] ) )) {
-
-					$data = $wp_filesystem->get_contents($_FILES[$module->get_prefix('import_file')]['tmp_name']);
-
-					$module->settings_import($data);
-
-					echo '<div class="notice notice-success is-dismissible">'.__('Settings imported.', 'sv100_companion').'</div>';
-				}
-			}
-        }
-	}
-
 	// Nonce for import
 	$import_url = wp_nonce_url(
 		admin_url() . 'admin.php?page=sv100_companion#section_sv100_companion_modules_sv_settings',
