@@ -14,8 +14,8 @@
 	class sv_settings extends init {
 		public function init() {
 			$this
-				->set_section_title( __( 'SV100 Settings Import/Export', 'sv100_companion' ) )
-				->set_section_desc( __( 'Import and export SV100 Theme settings', 'sv100_companion' ) )
+				->set_section_title( __( 'SV Settings Import/Export', 'sv100_companion' ) )
+				->set_section_desc( __( 'Import and export settings from SV theme and plugins', 'sv100_companion' ) )
 				->set_section_type( 'tools' )
 				->set_section_template_path( $this->get_path( 'lib/backend/tpl/tools.php' ) )
 				->register_scripts()
@@ -40,23 +40,6 @@
 			return $this;
 		}
 
-		public function settings_export() {
-			$filename								= $this->get_prefix( 'export_' . current_time( 'YmdHis' ) . '.json' );
-			$settings								= $this->get_instance('sv100')->get_modules_settings();
-			$settings[ 'sv100_scripts_settings' ]	= $this->get_instance('sv100')->get_scripts_settings();
-
-			foreach ( $settings as $name => $value ) {
-				$settings[ $name ] = array_filter( $value );
-			}
-
-			header( 'Content-Type: application/json' );
-			header( 'Content-Disposition: attachment;filename="' . $filename . '"' );
-
-			echo wp_json_encode( $settings );
-
-			wp_die();
-		}
-
 		public function settings_reset() {
 			if ( ! check_ajax_referer( $this->get_prefix( 'reset' ), 'nonce' ) ) return false;
 
@@ -72,54 +55,25 @@
 		}
 
 		public function settings_import(): sv_settings {
-			global $wp_filesystem;
-
-			if (!isset( $_GET[ $this->get_prefix( 'import' ) ] )){
-				return $this;
-			}
-			if (!\wp_verify_nonce( $_GET[ $this->get_prefix( 'import' ) ], $this->get_prefix( 'import' ))){
-				echo '<div class="notice notice-error is-dismissible">'.__('Invalid Nonce', 'sv100_companion').'</div>';
+			if(!isset($_POST[ $this->get_prefix( 'all' ) ])){
 				return $this;
 			}
 
-			if (!isset( $_FILES[ $this->get_prefix( 'import_file' ) ] )) {
-				echo '<div class="notice notice-error is-dismissible">'.__('No File', 'sv100_companion').'</div>';
-				return $this;
-			}
-
-
-			require_once ( ABSPATH . '/wp-admin/includes/file.php' );
-			\WP_Filesystem();
-
-			// settings uploaded?
-			if ( !$wp_filesystem->exists( $_FILES[ $this->get_prefix( 'import_file' ) ]['tmp_name'] ) ) {
-				echo '<div class="notice notice-error is-dismissible">'.__('No File', 'sv100_companion').'</div>';
-				return $this;
-			}
-
-			$data = json_decode( $wp_filesystem->get_contents( $_FILES[ $this->get_prefix( 'import_file' ) ]['tmp_name'] ), true );
+			$data = json_decode( stripslashes_deep($_POST[ $this->get_prefix( 'all' ) ]), true );
 
 			if(!$data){
-				echo '<div class="notice notice-error is-dismissible">'.__('Settings File corrupt', 'sv100_companion').'</div>';
+				echo '<div class="notice notice-error is-dismissible">'.__('Settings JSON corrupt', 'sv100_companion').'</div>';
 				return $this;
 			}
 
-			$this->delete_options();
+			//$this->delete_options();
 
 			// Sets all new options
-			foreach ( $data as $name => $settings ) {
-				// Module Settings
-
-				foreach ( $settings as $setting => $value ) {
-					$option = $setting;
-
-					if ( $name !== 'sv100_scripts_settings' ) {
-						$option = $name . '_settings_' . $setting;
-					}
-
-					update_option( $option, $value, true );
-				}
+			foreach ( $data as $option_id => $option_value ) {
+				update_option( $option_id, $option_value, true );
 			}
+
+			$this->get_script()->clear_cache();
 
 			echo '<div class="notice notice-success is-dismissible">'.__('Settings imported.', 'sv100_companion').'</div>';
 			return $this;
