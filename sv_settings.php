@@ -12,11 +12,10 @@
 				->get_root()
 				->add_section( $this );
 
-			add_action('admin_init', array($this, 'settings_import'));
-
 			// Action Hooks
 			add_action( 'wp_ajax_' . $this->get_prefix( 'export' ) , array( $this, 'settings_export' ) );
 			add_action( 'wp_ajax_' . $this->get_prefix( 'reset' ), array( $this, 'settings_reset' ) );
+			add_action( 'wp_ajax_' . $this->get_prefix( 'import' ), array( $this, 'settings_import' ) );
 		}
 
 		protected function register_scripts(): sv_settings {
@@ -44,29 +43,58 @@
 			wp_die();
 		}
 
-		public function settings_import(): sv_settings {
-			if(!isset($_POST[ $this->get_prefix( 'all' ) ])){
-				return $this;
+		public function settings_import() {
+			// Verify the AJAX nonce
+			if ( ! check_ajax_referer( $this->get_prefix( 'import' ), 'nonce', false ) ) {
+				wp_send_json_error( array(
+					'notice' => true,
+					'msg'    => __( 'Invalid nonce. Request not allowed.', 'sv100_companion' ),
+					'type'   => 'error',
+				) );
+				wp_die();
 			}
 
-			$data = json_decode( stripslashes_deep($_POST[ $this->get_prefix( 'all' ) ]), true );
-
-			if(!$data){
-				echo '<div class="notice notice-error is-dismissible">'.__('Settings JSON corrupt', 'sv100_companion').'</div>';
-				return $this;
+			// Check if the 'data' key exists in the POST request
+			if ( ! isset( $_POST['data'] ) ) {
+				wp_send_json_error( array(
+					'notice' => true,
+					'msg'    => __( 'No settings data provided.', 'sv100_companion' ),
+					'type'   => 'error',
+				) );
+				wp_die();
 			}
 
-			//$this->delete_options();
+			// Decode the JSON data from the 'data' key
+			$data = json_decode( stripslashes_deep( $_POST['data'] ), true );
 
-			// Sets all new options
+			if ( ! $data ) {
+				wp_send_json_error( array(
+					'notice' => true,
+					'msg'    => __( 'Settings JSON corrupt.', 'sv100_companion' ),
+					'type'   => 'error',
+				) );
+				wp_die();
+			}
+
+			// Optionally delete all current options (uncomment if required)
+			// $this->delete_options();
+
+			// Iterate over the settings data and update options
 			foreach ( $data as $option_id => $option_value ) {
 				update_option( $option_id, $option_value, true );
 			}
 
+			// Clear cache or any related processes
 			$this->get_script()->clear_cache();
 
-			echo '<div class="notice notice-success is-dismissible">'.__('Settings imported.', 'sv100_companion').'</div>';
-			return $this;
+			// Respond with success message
+			wp_send_json_success( array(
+				'notice' => true,
+				'msg'    => __( 'Settings imported successfully.', 'sv100_companion' ),
+				'type'   => 'success',
+			) );
+
+			wp_die();
 		}
 
 		private function delete_options() {
