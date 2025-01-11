@@ -43,6 +43,7 @@
 			wp_die();
 		}
 
+		/* @todo template ajax button broken - needs support in core to catch up data after page load and add it to the payload */
 		public function settings_import() {
 			// Verify the AJAX nonce
 			if ( ! check_ajax_referer( $this->get_prefix( 'import' ), 'nonce', false ) ) {
